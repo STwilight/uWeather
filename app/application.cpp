@@ -18,12 +18,19 @@
 Adafruit_PCD8544 display = Adafruit_PCD8544(LCD_SCLK, LCD_DIN, LCD_DC, LCD_CS, LCD_RST);
 DHT dht(DHT_PIN);
 BMP180 barometer;
-Timer procTimer;
+Timer sensorsUpdate;
+Timer displayRefresh;
+NtpClient *ntpClient;
 
 /* Переменные для хранения значений */
 float temp     = 0.0;
 float humidity = 0.0;
-float  pressure = 0.0;
+float pressure = 0.0;
+char wifi_ssid[] = "Symrak";
+char wifi_psw[]  = "s1PKo1Dj";
+char ntp_srv[]   = "pool.ntp.org";
+int ntp_interval = 600;
+double timezone  = -2.0;
 
 void dhtInit()
 {
@@ -103,6 +110,11 @@ void bmpGet(bool uart, bool temp)
 		}
 	}
 }
+void sensorsGet()
+{
+	dhtGet(false);
+	bmpGet(false, false);
+}
 void displayInit()
 {
 	display.begin();
@@ -118,25 +130,40 @@ void displayContent()
 {
 	display.clearDisplay();
 
-	display.print("Tmp = ");
+	display.print("T: ");
 	display.print(temp);
 	display.println("C");
 
-	display.print("Hum = ");
+	display.print("H: ");
 	display.print(humidity);
 	display.println("%");
 
-	display.print("Prs = ");
+	display.print("P: ");
 	display.print(pressure);
-	display.println("mm");
+	display.println("mm\n");
 
+	DateTime currentDateTime = SystemClock.now(eTZ_UTC);
+	display.println(currentDateTime.toShortDateString());
+	display.println(currentDateTime.toShortTimeString(true));
 	display.display();
 }
-void execute()
+void timeReceived(NtpClient& client, time_t timestamp)
 {
-	dhtGet(false);
-	bmpGet(false, false);
-	displayContent();
+	SystemClock.setTime(timestamp);
+}
+void wifiInit()
+{
+	WifiAccessPoint.enable(false);
+	WifiStation.config(wifi_ssid, wifi_psw);
+	WifiStation.enable(true);
+}
+void wifiConnectOk()
+{
+	ntpClient = new NtpClient(ntp_srv, ntp_interval, timeReceived);
+}
+void wifiConnectFail()
+{
+	WifiStation.waitConnection(wifiConnectOk, 10, wifiConnectFail);
 }
 
 void init()
@@ -144,12 +171,16 @@ void init()
 	Serial.begin(SERIAL_BAUD_RATE);
 	Serial.systemDebugOutput(false);
 
-	WifiStation.enable(false);
-	WifiAccessPoint.enable(false);
+	SystemClock.setTimeZone(timezone);
+
+	wifiInit();
 
 	dhtInit();
 	bmpInit();
 	displayInit();
 
-	procTimer.initializeMs(5000, execute).start();
+	sensorsUpdate.initializeMs(5000, sensorsGet).start();
+	displayRefresh.initializeMs(1000, displayContent).start();
+
+	WifiStation.waitConnection(wifiConnectOk, 30, wifiConnectFail);
 }
