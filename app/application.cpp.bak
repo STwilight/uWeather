@@ -19,10 +19,10 @@ Adafruit_PCD8544 display = Adafruit_PCD8544(LCD_SCLK, LCD_DIN, LCD_DC, LCD_CS, L
 DHT dht(DHT_PIN);
 BMP180 barometer;
 Timer sensorsUpdate;
+Timer webRequest;
 Timer displayRefresh;
 NtpClient *ntpClient;
-HttpClient *httpClient;
-FTPServer ftp;
+HttpClient httpClient;
 int sensorValue = 0;
 
 /* Переменные для хранения значений */
@@ -32,10 +32,11 @@ float  pressure     = 0.0;
 String wifi_ssid    = "Symrak";
 String wifi_psw     = "s1PKo1Dj";
 String ntp_srv      = "pool.ntp.org";
-int    ntp_interval = 600;
-int	   ftp_port		= 21;
-String ftp_login	= "uWeather";
-String ftp_psw		= "12345678";
+String web_srv		= "http://m.meteopost.com/weather/kiev/";
+int	   sns_interval = 5000;		// каждые 5 секунд
+int    dsp_interval = 1000;		// каждую 1 секунду
+int    ntp_interval = 1800;		// каждые 30 минут (в секундах)
+int	   web_interval = 1800000;	// каждые 30 минут (в милисекундах)
 double timezone     = -2.0;
 
 void dhtInit()
@@ -43,12 +44,11 @@ void dhtInit()
 	WDT.enable(false);
 	delay(1000);
 	dht.begin();
+	WDT.alive();
 }
 void dhtGet(bool uart)
 {
-	WDT.alive();
 	humidity = dht.readHumidity();
-	WDT.alive();
 	temp = dht.readTemperature();
 
 	if(isnan(temp))
@@ -159,20 +159,25 @@ void timeReceived(NtpClient& client, time_t timestamp)
 
 void weatherParse(HttpClient& client, bool successful)
 {
+	if (successful)
+		Serial.println("Success get");
+	else
+		Serial.println("Failed");
+
 	String response = client.getResponseString();
-	Serial.println("RESPONSE CODE: " + client.getResponseCode());
-	Serial.println("RESPONSE: \n" + response + "\n");
+	Serial.println("Server response: \n" + response + "\n");
 }
 void weatherRequest()
 {
-	if (httpClient->isProcessing()) return;
-
-	httpClient->downloadFile("http://meteopost.com/weather/kiev/");
-}
-void ftpInit()
-{
-	ftp.listen(ftp_port);
-	ftp.addUser(ftp_login, ftp_psw);
+	WDT.enable(false);
+	if (httpClient.isProcessing())
+	{
+		WDT.alive();
+		return;
+	}
+	WDT.enable(false);
+	httpClient.downloadString(web_srv, weatherParse);
+	WDT.alive();
 }
 void wifiInit()
 {
@@ -182,10 +187,9 @@ void wifiInit()
 }
 void wifiConnectOk()
 {
-	ftpInit();
 	ntpClient = new NtpClient(ntp_srv, ntp_interval, timeReceived);
-	httpClient = new HttpClient();
-	weatherRequest();
+
+	//webRequest.initializeMs(web_interval, weatherRequest).start();
 }
 void wifiConnectFail()
 {
@@ -211,12 +215,16 @@ void init()
 	dhtInit();
 	bmpInit();
 
-	wifiInit();
-
 	displayInit();
 
-	sensorsUpdate.initializeMs(5000, sensorsGet).start();
-	displayRefresh.initializeMs(1000, displayContent).start();
+	WDT.alive();
+
+	sensorsUpdate.initializeMs(sns_interval, sensorsGet).start();
+	displayRefresh.initializeMs(dsp_interval, displayContent).start();
+
+	wifiInit();
+
+	WDT.alive();
 
 	WifiStation.waitConnection(wifiConnectOk, 20, wifiConnectFail);
 }
