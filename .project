@@ -3,7 +3,7 @@
 	<name>Personal-Weather</name>
 	<comment></comment>
 	<projects>
-		<project>Personal-Weather</project>
+		<project>uWeather</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
