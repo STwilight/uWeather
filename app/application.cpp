@@ -159,15 +159,16 @@ void timeReceived(NtpClient& client, time_t timestamp)
 
 void weatherParse(HttpClient& client, bool successful)
 {
-	String response = client.getResponseString();
-	Serial.println("RESPONSE CODE: " + client.getResponseCode());
-	Serial.println("RESPONSE: \n" + response + "\n");
+	Serial.println("Request was saved in \"index.html\" file successfully!");
 }
 void weatherRequest()
 {
+	WDT.alive();
 	if (httpClient->isProcessing()) return;
 
-	httpClient->downloadFile("http://meteopost.com/weather/kiev/");
+	httpClient->setRequestHeader("User agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0");
+	WDT.alive();
+	httpClient->downloadFile("http://m.meteopost.com/weather/kiev/", "index.html", weatherParse);
 }
 void ftpInit()
 {
