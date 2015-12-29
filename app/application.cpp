@@ -160,6 +160,8 @@ void timeReceived(NtpClient& client, time_t timestamp)
 void weatherParse(HttpClient& client, bool successful)
 {
 	Serial.println("Request was saved in \"index.html\" file successfully!");
+	String response = client.getResponseString();
+	Serial.println(response);
 }
 void weatherRequest()
 {
@@ -168,7 +170,8 @@ void weatherRequest()
 
 	httpClient->setRequestHeader("User agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0");
 	WDT.alive();
-	httpClient->downloadFile("http://m.meteopost.com/weather/kiev/", "index.html", weatherParse);
+	//httpClient->downloadFile("http://m.meteopost.com/weather/kiev/", "index.html", weatherParse);
+	httpClient->downloadString("http://m.meteopost.com/weather/kiev/", weatherParse);
 }
 void ftpInit()
 {

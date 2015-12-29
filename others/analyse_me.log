@@ -1,0 +1,222 @@
+﻿rl<0>l��|<0>�l�|�l�b|����r�blb��nn�lnn���bp�lrlrlp�n��lbn�|������b��nn�<0>l��l`�nnl`nr���n�l�lp�n�r�����bn�|l쌎b��nn�<0>l`�nnl`nr���n23:56:46.302> l`p�n�r�����l�r�bn�|��l�b��nn�<0>l`�nnl�l`nr���nr�l`r��nr�l`rl+TCP connection
+23:56:46.302> 
+23:56:46.367> timeout updating: 70 -> 65535
+23:56:46.367> 
+23:56:46.367> Server timeout updating: 40 -> 900
+23:56:46.367> 
+23:56:46.367> fs.start: size:736 Kb, offset:0x0x44000
+23:56:46.367> 
+23:56:46.367> 
+23:56:46.367> mount res: 0
+23:56:46.367> 
+23:56:46.367> 
+23:56:46.367> 
+23:56:46.367> 
+23:56:46.367> 
+23:56:47.677> libDHT: Detected DHT-22 compatible sensor.
+23:56:47.677> 
+23:56:47.677> Station configuration was updated to: Symrak
+23:56:47.677> 
+23:56:48.176> mode : sta(18:fe:34:f4:79:cb)
+23:56:48.176> 
+23:56:48.176> add if0
+23:56:48.176> 
+23:56:49.174> f 0, rtc time init...
+23:56:49.174> 
+23:56:50.297> scandone
+23:56:50.297> 
+23:56:51.169> state: 0 -> 2 (b0)
+23:56:51.169> 
+23:56:52.168> reconnect
+23:56:52.168> 
+23:56:52.230> state: 2 -> 0 (0)
+23:56:52.230> 
+23:56:54.352> f 0, scandone
+23:56:54.352> 
+23:56:55.226> state: 0 -> 2 (b0)
+23:56:55.226> 
+23:56:56.226> reconnect
+23:56:56.226> 
+23:56:56.226> state: 2 -> 0 (0)
+23:56:56.226> 
+23:56:58.346> f -180, scandone
+23:56:58.346> 
+23:56:58.346> no Symrak found, reconnect after 1s
+23:56:58.346> 
+23:56:58.471> reconnect
+23:56:58.471> 
+23:57:00.592> f 0, scandone
+23:57:00.592> 
+23:57:01.528> state: 0 -> 2 (b0)
+23:57:01.528> 
+23:57:02.527> reconnect
+23:57:02.527> 
+23:57:02.527> state: 2 -> 0 (0)
+23:57:02.527> 
+23:57:04.648> f -180, scandone
+23:57:04.648> 
+23:57:04.648> no Symrak found, reconnect after 1s
+23:57:04.648> 
+23:57:04.712> reconnect
+23:57:04.712> 
+23:57:06.894> f 0, scandone
+23:57:06.894> 
+23:57:07.768> state: 0 -> 2 (b0)
+23:57:07.768> 
+23:57:07.768> state: 2 -> 3 (0)
+23:57:07.768> 
+23:57:07.768> state: 3 -> 5 (10)
+23:57:07.768> 
+23:57:07.768> add 0
+23:57:07.768> 
+23:57:07.768> aid 7
+23:57:07.768> 
+23:57:07.768> pm open phy_2,type:2 0 0
+23:57:07.768> 
+23:57:07.768> cnt 
+23:57:07.768> 
+23:57:07.844> 
+23:57:07.844> 
+23:57:07.844> connected with Symrak, channel 6
+23:57:07.844> 
+23:57:07.844> dhcp client start...
+23:57:07.844> 
+23:57:24.991> ip:192.168.1.200,mask:255.255.255.0,gw:192.168.1.1
+23:57:24.991> 
+23:57:24.991> addUser: uWeather 12345678
+23:57:24.991> 
+23:57:24.991> +TCP connection
+23:57:24.991> 
+23:57:24.991> Download: http://m.meteopost.com:80/weather/kiev/
+23:57:24.991> 
+23:57:24.991> connect to: m.meteopost.com
+23:57:24.991> 
+23:57:24.991> realloc 52 -> 267
+23:57:24.991> 
+23:57:25.117> DNS record found: m.meteopost.com = 91.203.145.94
+23:57:25.117> 
+23:57:25.117> TcpConnection::connect result:, 0
+23:57:25.117> 
+23:57:25.117> OnConnected
+23:57:25.117> 
+23:57:25.117> TCP connected
+23:57:25.117> 
+23:57:25.117> onReadyToSendData: 0
+23:57:25.117> 
+23:57:25.117> TcpClient request completed
+23:57:25.117> 
+23:57:25.117> TCP sent: 140
+23:57:25.117> 
+23:57:25.117> onReadyToSendData: 2
+23:57:25.117> 
+23:57:25.117> Header pos: 172
+23:57:25.117> 
+23:57:25.117> Date === Sat, 26 Dec 2015 21:58:06 GMT
+23:57:25.117> 
+23:57:25.117> Server === Apache
+23:57:25.117> 
+23:57:25.117> Vary === Accept-Encoding
+23:57:25.117> 
+23:57:25.117> Content-Length === 3804
+23:57:25.117> 
+23:57:25.117> Connection === close
+23:57:25.117> 
+23:57:25.117> Content-Type === text/html; charset=utf-8
+23:57:25.117> 
+23:57:25.117> TCP received: 1460 bytes
+23:57:25.117> 
+23:57:25.117> onReadyToSendData: 1
+23:57:25.117> 
+23:57:25.117> TCP received: 1460 bytes
+23:57:25.117> 
+23:57:25.117> onReadyToSendData: 1
+23:57:25.117> 
+23:57:25.117> TCP received: 1060 bytes
+23:57:25.117> 
+23:57:25.117> onReadyToSendData: 1
+23:57:25.117> 
+23:57:25.117> TCP received: (null)
+23:57:25.117> 
+23:57:25.117> Request was saved in "index.html" file successfully!
+23:57:25.117> 
+23:57:25.117> 
+23:57:25.117> 
+23:57:25.117> <!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+23:57:25.117> 
+23:57:25.455> <html><head>
+23:57:25.455> 
+23:57:25.455> <title>Киев - текущая погода</title>
+23:57:25.455> 
+23:57:25.455> <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+23:57:25.455> 
+23:57:25.455> <meta name="description" content="Текущая погода в Киеве. Метеосводка Киева за последние сутки: диаграммы температуры, давления, ветра" />
+23:57:25.455> 
+23:57:25.455> <link rel="shortcut icon" href="http://meteopost.com/favicon.ico" />
+23:57:25.455> 
+23:57:25.455> <style type="text/css">
+23:57:25.455> 
+23:57:25.455>  A:hover {color:#000000;text-decoration:underline;}
+23:57:25.455> 
+23:57:25.455>  img {vertical-align: middle; border:0px;}
+23:57:25.455> 
+23:57:25.455>  body {font-family:Verdana,Arial,Helvetica, sans-serif; font-size:13px; color:#000000; text-decoration:none;background:#E1F5FF}
+23:57:25.455> 
+23:57:25.455>  a {color: #000000; text-decoration:none;font-size:14px;}
+23:57:25.455> 
+23:57:25.455>  td {font-family:Verdana; font-size:13px;}
+23:57:25.455> 
+23:57:25.455>  b {font-size:14px;}
+23:57:25.455> 
+23:57:25.455>  .head {font-family:Verdana,Arial,Helvetica, sans-serif; font-size:12px; color:#ffffff; text-decoration:none;background:#0080C0}
+23:57:25.455> 
+23:57:25.455>  .head0 {height:34px; font-family:Verdana,Arial,Helvetica, sans-serif; font-size:18px; color:#ffffff; text-decoration:none;background:#0080C0}
+23:57:25.455> 
+23:57:25.455> .c2 {font-family: "Verdana"; font-size:17px;color: #EC0000;}
+23:57:25.455> 
+23:57:25.455> .dat{color:#0000CA;font-size:13px;font-family:Verdana;}
+23:57:25.455> 
+23:57:25.455> </style>
+23:57:25.455> 
+23:57:25.455> </head>
+23:57:25.455> 
+23:57:25.455> <body>
+23:57:25.455> 
+23:57:25.455> <table width="100%">
+23:57:25.455> 
+23:57:25.455> <tr><td class="head0"><a href="/"><img src="http://meteopost.com/pic/favicon.png" width="16" height="16" alt="погода в Украине"/></a> МЕТЕОПОСТ<br /><span class="head">Киев - текущая погода</span></td></tr>
+23:57:25.455> 
+23:57:25.455> <tr><td><a rel="nofollow"  href="/"><span class="c2">Г</span>лавная</a> <a  href="/weather/"><span class="c2">С</span>водки</a> <a  href="/ukraine/"><span class="c2">П</span>рогнозы</a></td></tr><tr><td class="head"></td></tr>
+23:57:25.455> 
+23:57:25.455> <tr><td>
+23:57:25.455> 
+23:57:25.455> <table><tr><td><b>Погода в Киеве на</b></td><td><span style="font-size:22px;color:black">23:30</span> Kyiv</td></tr><tr><td>Температура воздуха </td><td><span class="dat">+11&deg;</span></td></tr><tr><td>Температура комфорта </td><td><span class="dat">+11&deg;</span></td></tr><tr><td>Точка росы </td><td><span class="dat">+7&deg;</span></td></tr><tr><td>Влажность </td><td><span class="dat">76%</span></td></tr><tr><td>Давление (на уровне моря) </td><td><span class="dat">759 мм.рт.ст.</span></td></tr><tr><td>Давление (на станции) </td><td><span class="dat">743 мм.рт.ст.</span></td></tr><tr><td>Ветер </td><td><span class="dat">западный</span></td></tr><tr><td>Скорость ветра </td><td><span class="dat">8 м/с</span></td></tr><tr><td>Пог. явления </td><td><span class="dat">нет</span></td></tr><tr><td>Облачность </td><td><span class="dat">сплошная (100%) 0.78км </span></td></tr><tr><td>Видимость </td><td><span class="dat">&gt;10 км</span></td></tr><tr><td>Изменения погоды (на 30 мин) </td><td><span class="dat">ожид. временно без явлений</span></td></tr><tr><td>Характер погоды </td><td></td></tr></table><br/><a class="lnk" href="/city/29313/"> <span class="c2">П</span>рогноз погоды на 3 дня в  Киеве</a></td></tr>
+23:57:25.455> 
+23:57:25.455> <tr><td class="head"></td></tr>
+23:57:25.455> 
+23:57:25.455> </table>
+23:57:25.455> 
+23:57:25.455> <p>
+23:57:25.455> 
+23:57:25.455> <b>© 2010 МЕТЕОПОСТ</b><br /> <a  href="http://meteopost.com/"><span class="c2">П</span>олная версия</a>
+23:57:25.455> 
+23:57:25.455> <br/><span class="head2">Українською</span> <a rel="nofollow" href="/weather/kiev/ua/"><img src="http://meteopost.com/pic/ua.png" width="22" height="15" alt="ua"/></a><br /><script src="/bm.js" type="text/javascript"></script>
+23:57:25.455> 
+23:57:25.455> </p>
+23:57:25.455> 
+23:57:25.455> </body>
+23:57:25.455> </html>
+23:57:25.455> 
+23:57:25.455> TCP connection closing
+23:57:25.455> 
+23:57:25.455> -TCP connection
+23:57:25.455> 
+23:57:26.527> UDP LocalPort: 4097
+23:57:26.527> 
+23:57:26.527> UDP connect to 194.54.161.214:123
+23:57:26.527> 
+23:57:26.527> time updated? 1
+23:57:26.527> 
+0:07:25.095> UDP connect to 193.34.155.4:123
+0:07:25.095> 
+0:07:25.095> time updated? 1
+0:07:25.095> 
