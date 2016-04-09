@@ -6,3 +6,4 @@
 /pcb/*.EDF
 /pcb/*.log
 /out
+/.settings
