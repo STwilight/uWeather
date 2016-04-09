@@ -5,14 +5,29 @@
 #include <Libraries/Adafruit_PCD8544/Adafruit_PCD8544.h>
 
 /* Определение выводов */
-#define LCD_SCLK 5
-#define LCD_DIN  15
-#define LCD_DC   13
-#define LCD_CS   12
-#define LCD_RST  14
+/*
+	#define LCD_SCLK 5
+	#define LCD_DIN  15
+	#define LCD_DC   13
+	#define LCD_CS   12
+	#define LCD_RST  14
+	#define DHT_PIN	 0
+	#define BMP_SCL  2
+	#define BMP_SDA  4
+*/
+
+/* Определение выводов */
+#define LCD_SCLK 2
+#define LCD_DIN  13
+#define LCD_DC   12
+#define LCD_CS   14
+#define LCD_RST  16
+
 #define DHT_PIN	 0
-#define BMP_SCL  2
+
 #define BMP_SDA  4
+#define BMP_SCL  5
+
 
 /* Создание объектов */
 Adafruit_PCD8544 display = Adafruit_PCD8544(LCD_SCLK, LCD_DIN, LCD_DC, LCD_CS, LCD_RST);
@@ -29,8 +44,6 @@ int sensorValue = 0;
 float  temp         = 0.0;
 float  humidity     = 0.0;
 float  pressure     = 0.0;
-String wifi_ssid    = "Symrak";
-String wifi_psw     = "s1PKo1Dj";
 String ntp_srv      = "pool.ntp.org";
 int    ntp_interval = 600;
 int	   ftp_port		= 21;
@@ -157,21 +170,40 @@ void timeReceived(NtpClient& client, time_t timestamp)
 	SystemClock.setTime(timestamp);
 }
 
+String getString(String begin_phraze, String end_phraze, String content)
+{
+	String result;
+	uint32_t begin_num, end_num;
+
+	begin_num = content.indexOf(begin_phraze) + begin_phraze.length();
+	end_num = content.indexOf(end_phraze);
+
+	result = content.substring(begin_num, end_num);
+
+	return result;
+}
 void weatherParse(HttpClient& client, bool successful)
 {
 	Serial.println("Request was saved in \"index.html\" file successfully!");
 	String response = client.getResponseString();
-	Serial.println(response);
+	//Serial.println(response);
+
+	Serial.println("\n\r *** *** *** \n\r");
+
+	WDT.enable(false);
+	String tmp = getString("<table><tr><td><b>", "</td><td><img src=\"http://meteopost.com/pic/met/", response);
+	Serial.println("Parsed: " + tmp);
+	WDT.alive();
 }
 void weatherRequest()
 {
 	WDT.alive();
 	if (httpClient->isProcessing()) return;
 
-	httpClient->setRequestHeader("User agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0");
+	httpClient->setRequestHeader("User agent", "Mozilla/5.0 (Linux; Android 5.1.1; Sensation Build/LMY48G) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/39.0.0.0 Mobile Safari/537.36");
 	WDT.alive();
-	//httpClient->downloadFile("http://m.meteopost.com/weather/kiev/", "index.html", weatherParse);
-	httpClient->downloadString("http://m.meteopost.com/weather/kiev/", weatherParse);
+	//httpClient->downloadFile("http://meteopost.com/weather/kiev/", "index.html", weatherParse);
+	httpClient->downloadString("http://meteopost.com/weather/kiev/", weatherParse);
 }
 void ftpInit()
 {
@@ -181,7 +213,7 @@ void ftpInit()
 void wifiInit()
 {
 	WifiAccessPoint.enable(false);
-	WifiStation.config(wifi_ssid, wifi_psw);
+	WifiStation.config(WIFI_SSID, WIFI_PWD);
 	WifiStation.enable(true);
 }
 void wifiConnectOk()

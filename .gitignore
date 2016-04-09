@@ -1,0 +1,7 @@
+/pcb/*.workspace
+/pcb/*.pdsbak
+/pcb/*.sts
+/pcb/*.rte
+/pcb/*.DO
+/pcb/*.EDF
+/pcb/*.log
