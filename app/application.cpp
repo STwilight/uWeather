@@ -5,18 +5,6 @@
 #include <Libraries/Adafruit_PCD8544/Adafruit_PCD8544.h>
 
 /* Определение выводов */
-/*
-	#define LCD_SCLK 5
-	#define LCD_DIN  15
-	#define LCD_DC   13
-	#define LCD_CS   12
-	#define LCD_RST  14
-	#define DHT_PIN	 0
-	#define BMP_SCL  2
-	#define BMP_SDA  4
-*/
-
-/* Определение выводов */
 #define LCD_SCLK 2
 #define LCD_DIN  13
 #define LCD_DC   12
@@ -28,6 +16,8 @@
 #define BMP_SDA  4
 #define BMP_SCL  5
 
+#define BTN_PIN	 3
+
 
 /* Создание объектов */
 Adafruit_PCD8544 display = Adafruit_PCD8544(LCD_SCLK, LCD_DIN, LCD_DC, LCD_CS, LCD_RST);
@@ -35,6 +25,7 @@ DHT dht(DHT_PIN);
 BMP180 barometer;
 Timer sensorsUpdate;
 Timer displayRefresh;
+Timer buttonStateCheck;
 NtpClient *ntpClient;
 HttpClient *httpClient;
 FTPServer ftp;
@@ -50,6 +41,7 @@ int	   ftp_port		= 21;
 String ftp_login	= "uWeather";
 String ftp_psw		= "12345678";
 double timezone     = -2.0;
+bool   btn_pushed	= false;
 
 void dhtInit()
 {
@@ -228,6 +220,22 @@ void wifiConnectFail()
 	WifiStation.waitConnection(wifiConnectOk, 10, wifiConnectFail);
 }
 
+void IRAM_ATTR buttonPush()
+{
+	btn_pushed = digitalRead(BTN_PIN);
+}
+void displayButtonState()
+{
+	display.clearDisplay();
+
+	if(btn_pushed)
+		display.print("1");
+	else
+		display.print("0");
+
+	display.display();
+}
+
 void init()
 {
 	//WDT.enable(false);
@@ -239,20 +247,25 @@ void init()
 
 	WDT.alive();
 
-	Serial.begin(SERIAL_BAUD_RATE);
-	Serial.systemDebugOutput(true);
+		Serial.begin(SERIAL_BAUD_RATE);
+		Serial.systemDebugOutput(true);
 
-	SystemClock.setTimeZone(timezone);
+		SystemClock.setTimeZone(timezone);
 
-	dhtInit();
-	bmpInit();
+		dhtInit();
+		bmpInit();
 
-	wifiInit();
+		wifiInit();
+
+	//attachInterrupt(BTN_PIN, buttonPush, CHANGE);
 
 	displayInit();
 
-	sensorsUpdate.initializeMs(5000, sensorsGet).start();
-	displayRefresh.initializeMs(1000, displayContent).start();
+	//display.setTextSize(5);
+	//buttonStateCheck.initializeMs(100, displayButtonState).start();
 
-	WifiStation.waitConnection(wifiConnectOk, 20, wifiConnectFail);
+		sensorsUpdate.initializeMs(5000, sensorsGet).start();
+		displayRefresh.initializeMs(1000, displayContent).start();
+
+		WifiStation.waitConnection(wifiConnectOk, 20, wifiConnectFail);
 }
