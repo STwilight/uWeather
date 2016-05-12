@@ -44,7 +44,7 @@ int    ntp_interval = 600;
 int	   ftp_port		= 21;
 String ftp_login	= "uWeather";
 String ftp_psw		= "12345678";
-double timezone     = -2.0;
+double timezone     = -3.0;
 
 bool   btn_pushed	= false;
 int32  pwm_value	= 0;
@@ -229,6 +229,10 @@ void wifiConnectFail()
 	WifiStation.waitConnection(wifiConnectOk, 10, wifiConnectFail);
 }
 
+void IRAM_ATTR buttonPush()
+{
+	btn_pushed = !digitalRead(BTN_PIN);
+}
 void buttonAction()
 {
 	if(btn_pushed)
@@ -239,11 +243,6 @@ void buttonAction()
 			pwm_value = 0;
 	}
 	backlightPWM.analogWrite(LCD_BL, pwm_value);
-}
-void IRAM_ATTR buttonPush()
-{
-	btn_pushed = !digitalRead(BTN_PIN);
-	buttonAction();
 }
 
 void init()
@@ -273,7 +272,8 @@ void init()
 
 	displayInit();
 
-	sensorsUpdate.initializeMs(1000, sensorsGet).start();
+	buttonStateCheck.initializeMs(150, buttonAction).start();
+	sensorsUpdate.initializeMs(2500, sensorsGet).start();
 	displayRefresh.initializeMs(1000, displayContent).start();
 
 	WifiStation.waitConnection(wifiConnectOk, 20, wifiConnectFail);
