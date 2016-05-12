@@ -1,5 +1,6 @@
 #include <user_config.h>
 #include <SmingCore/SmingCore.h>
+#include <HardwarePWM.h>
 #include <Libraries/DHT/DHT.h>
 #include <Libraries/BMP180/BMP180.h>
 #include <Libraries/Adafruit_PCD8544/Adafruit_PCD8544.h>
@@ -10,6 +11,7 @@
 #define LCD_DC   12
 #define LCD_CS   14
 #define LCD_RST  16
+#define LCD_BL	 15
 
 #define DHT_PIN	 0
 
@@ -18,9 +20,12 @@
 
 #define BTN_PIN	 3
 
+/* Массив выводов ШИМ */
+uint8_t pwmPins[1] = {LCD_BL};
 
 /* Создание объектов */
 Adafruit_PCD8544 display = Adafruit_PCD8544(LCD_SCLK, LCD_DIN, LCD_DC, LCD_CS, LCD_RST);
+HardwarePWM backlightPWM(pwmPins, 1);
 DHT dht(DHT_PIN);
 BMP180 barometer;
 Timer sensorsUpdate;
@@ -29,7 +34,6 @@ Timer buttonStateCheck;
 NtpClient *ntpClient;
 HttpClient *httpClient;
 FTPServer ftp;
-int sensorValue = 0;
 
 /* Переменные для хранения значений */
 float  temp         = 0.0;
@@ -41,7 +45,9 @@ int	   ftp_port		= 21;
 String ftp_login	= "uWeather";
 String ftp_psw		= "12345678";
 double timezone     = -2.0;
+
 bool   btn_pushed	= false;
+int32  pwm_value	= 0;
 
 void dhtInit()
 {
@@ -150,7 +156,10 @@ void displayContent()
 
 	display.print("P: ");
 	display.print(pressure);
-	display.println("mm\n");
+	display.println("mm");
+
+	display.print("PWM: ");
+	display.println(pwm_value);
 
 	DateTime currentDateTime = SystemClock.now(eTZ_UTC);
 	display.println(currentDateTime.toShortDateString());
@@ -220,52 +229,52 @@ void wifiConnectFail()
 	WifiStation.waitConnection(wifiConnectOk, 10, wifiConnectFail);
 }
 
+void buttonAction()
+{
+	if(btn_pushed)
+	{
+		if(pwm_value < 22222)
+			pwm_value += 2222;
+		else
+			pwm_value = 0;
+	}
+	backlightPWM.analogWrite(LCD_BL, pwm_value);
+}
 void IRAM_ATTR buttonPush()
 {
-	btn_pushed = digitalRead(BTN_PIN);
-}
-void displayButtonState()
-{
-	display.clearDisplay();
-
-	if(btn_pushed)
-		display.print("1");
-	else
-		display.print("0");
-
-	display.display();
+	btn_pushed = !digitalRead(BTN_PIN);
+	buttonAction();
 }
 
 void init()
 {
-	//WDT.enable(false);
-	//WDT.alive();
-	//system_soft_wdt_stop();
-	//system_soft_wdt_restart();
+	/* Watchdog functions (for information)
+		WDT.enable(false);
+		WDT.alive();
+		system_soft_wdt_stop();
+		system_soft_wdt_restart();
+	*/
 
 	spiffs_mount();
 
 	WDT.alive();
 
-		Serial.begin(SERIAL_BAUD_RATE);
-		Serial.systemDebugOutput(true);
+	attachInterrupt(BTN_PIN, buttonPush, CHANGE);
 
-		SystemClock.setTimeZone(timezone);
+	Serial.systemDebugOutput(false);
+	//Serial.begin(SERIAL_BAUD_RATE);
 
-		dhtInit();
-		bmpInit();
+	SystemClock.setTimeZone(timezone);
 
-		wifiInit();
+	dhtInit();
+	bmpInit();
 
-	//attachInterrupt(BTN_PIN, buttonPush, CHANGE);
+	wifiInit();
 
 	displayInit();
 
-	//display.setTextSize(5);
-	//buttonStateCheck.initializeMs(100, displayButtonState).start();
+	sensorsUpdate.initializeMs(1000, sensorsGet).start();
+	displayRefresh.initializeMs(1000, displayContent).start();
 
-		sensorsUpdate.initializeMs(5000, sensorsGet).start();
-		displayRefresh.initializeMs(1000, displayContent).start();
-
-		WifiStation.waitConnection(wifiConnectOk, 20, wifiConnectFail);
+	WifiStation.waitConnection(wifiConnectOk, 20, wifiConnectFail);
 }
